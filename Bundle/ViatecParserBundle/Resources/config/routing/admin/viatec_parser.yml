@@ -1,0 +1,25 @@
+ult_admin_viatec_parser_command:
+    path: /command
+    methods: [GET]
+    defaults:
+          _controller: OnixcatViatecParserBundle:ViatecParser:viatecParserScript
+ult_admin_viatec_parser_files_list:
+    path: /files/list
+    methods: [GET]
+    defaults:
+          _controller: OnixcatViatecParserBundle:ViatecParser:filesList
+ult_admin_viatec_parser_file_download:
+    path: /files/{name}/download
+    methods: [GET]
+    defaults:
+          _controller: OnixcatViatecParserBundle:ViatecParser:downloadFile
+ult_admin_viatec_parser_file_delete:
+    path: /files/{name}/delete
+    methods: [DELETE]
+    defaults:
+          _controller: OnixcatViatecParserBundle:ViatecParser:deleteFile
+ult_admin_viatec_parser_edit_settings:
+    path: /settings/edit
+    methods: [GET, POST]
+    defaults:
+          _controller: OnixcatViatecParserBundle:ViatecParserSettings:editSettings

@@ -1,0 +1,38 @@
+services:
+
+    Onixcat\Component\Viatec\Factory\ViatecFactory:
+        public: false
+    viatec.guzzle_helper:
+        factory: 'Onixcat\Component\Viatec\Factory\ViatecFactory:createConnectHelper'
+        arguments:
+            - '%parser_viatec.auth_url%'
+            - "@=service('doctrine.orm.entity_manager').getRepository('OnixcatViatecParserBundle:ParserViatecSettings').getViatecLogin()"
+            - "@=service('doctrine.orm.entity_manager').getRepository('OnixcatViatecParserBundle:ParserViatecSettings').getViatecPassword()"
+            - '%parser_viatec.auth_verify_needle%'
+        public: false
+    viatec.crawler_parser:
+        factory: 'Onixcat\Component\Viatec\Factory\ViatecFactory:createParser'
+        public: false
+    viatec.saver:
+        factory: 'Onixcat\Component\Viatec\Factory\ViatecFactory:createSaver'
+        arguments: ['%parser_viatec.excel_file_header%']
+    viatec.cache:
+        factory: 'Onixcat\Component\Viatec\Factory\ViatecFactory:createCacheBuilder'
+        arguments: ['%parser_viatec.redis_host%', '%parser_viatec.redis_port%']
+
+    Onixcat\Bundle\ViatecParserBundle\Menu\AdminMenuListener:
+        tags:
+            - { name: kernel.event_listener, event: sylius.menu.admin.main, method: addItems }
+    Onixcat\Bundle\ViatecParserBundle\Helpers\FilesystemHelper:
+        arguments:
+            - !service
+                class: 'Symfony\Component\Finder\Finder'
+            - '@filesystem'
+            - '%parser_viatec.files_root_dir%'
+    Onixcat\Component\Viatec\ParserProcessor:
+        arguments:
+            - '@viatec.guzzle_helper'
+            - '@viatec.crawler_parser'
+            - '@viatec.saver'
+            - '@viatec.cache'
+            - '%parser_viatec.excel_start_row%'

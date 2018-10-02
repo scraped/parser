@@ -1,0 +1,52 @@
+{% extends '@SyliusAdmin/layout.html.twig' %}
+
+{% import '@SyliusUi/Macro/messages.html.twig' as messages %}
+{% import '@SyliusUi/Macro/buttons.html.twig' as buttons %}
+
+{% block title %} {{ 'onixcat.ui.viatec_parser_files'|trans }} {{ parent() }}{% endblock %}
+
+
+
+
+{% block content %}
+    {% for message in app.flashes('notice') %}
+        {{ messages.success(message) }}
+    {% endfor %}
+    <div class="ui stackable two column grid">
+        <div class="column">
+            {% include'OnixcatViatecParserBundle:Files:header.html.twig' %}
+            {% include 'OnixcatViatecParserBundle:Files:breadcrumb.html.twig' %}
+        </div>
+    </div>
+    <div class="ui segment overflow-x-auto">
+    {% if files is defined and files | length > 0 %}
+        <table class="ui celled table">
+            <thead>
+            <tr>
+                <th>
+                    Список файлов
+                </th>
+                <th>
+                    Действия
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for file in files %}
+                <tr class="item">
+                    <td>{{ file.file_name }}</td>
+                    <td>
+                        <div class="ui buttons">
+                            {{ buttons.default(path('ult_admin_viatec_parser_file_download', {'name': file.file_name}), 'onixcat.ui.viatec_file_download', file.file_name, 'download', 'blue') }}
+                            {{ buttons.delete(path('ult_admin_viatec_parser_file_delete', {'name': file.file_name}), null, true, file.file_name) }}
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    {% else %}
+        {{ messages.info('onixcat.ui.files_not_found') }}
+    {% endif %}
+{% endblock %}

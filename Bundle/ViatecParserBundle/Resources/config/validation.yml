@@ -1,0 +1,8 @@
+Onixcat\Bundle\ViatecParserBundle\Entity\ParserViatecSettings:
+    properties:
+        viatecLogin:
+            - NotBlank: { message: 'onixcat.parser.viatec.login.empty' }
+            - Length: { min: 2, max: 50, minMessage: 'onixcat.parser.viatec.login.min', maxMessage: 'onixcat.parser.viatec.login.max' }
+        viatecPassword:
+            - NotBlank: { message: 'onixcat.parser.viatec.password.empty' }
+            - Length: { min: 3, max: 100, minMessage: 'onixcat.parser.viatec.password.min', maxMessage: 'onixcat.parser.viatec.password.max' }

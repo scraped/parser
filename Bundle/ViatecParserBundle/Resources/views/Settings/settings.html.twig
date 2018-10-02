@@ -1,0 +1,34 @@
+{% extends '@SyliusAdmin/layout.html.twig' %}
+
+{% import '@SyliusUi/Macro/messages.html.twig' as messages %}
+{% import '@SyliusUi/Macro/buttons.html.twig' as buttons %}
+
+{% block title %} {{ 'onixcat.ui.viatec_parser_settings'|trans }} {{ parent() }}{% endblock %}
+
+{% form_theme form 'SyliusUiBundle:Form:theme.html.twig' %}
+
+{% block content %}
+    {% for message in app.flashes('notice') %}
+        {{ messages.success(message) }}
+    {% endfor %}
+    <div class="ui stackable two column grid">
+        <div class="column">
+            {% include'OnixcatViatecParserBundle:Settings:header.html.twig' %}
+            {% include 'OnixcatViatecParserBundle:Settings:breadcrumb.html.twig' %}
+        </div>
+    </div>
+    {{ form_start(form, {'attr': {'class': 'ui form'}}) }}
+    <div class="ui two column stackable grid">
+        <div class="column">
+            <div class="ui segment">
+                <h4 class="ui dividing header">{{ 'onixcat.ui.viatec_parser_auth_data'| trans }}</h4>
+                <div class="two fields">
+                    {{ form_row(form.viatecLogin) }}
+                    {{ form_row(form.viatecPassword) }}
+                </div>
+                <button type="submit" class="ui green button">{{ 'onixcat.ui.viatec_parser_settings_save' | trans }}</button>
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}

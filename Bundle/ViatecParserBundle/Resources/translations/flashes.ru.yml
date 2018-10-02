@@ -1,0 +1,5 @@
+onixcat:
+        ui:
+            viatec_success_delete_file: Файл успешно удален!
+            viatec_auth_info_success_update: Данные успешно изменены!
+

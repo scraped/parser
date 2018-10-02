@@ -1,0 +1,21 @@
+Onixcat\Bundle\ViatecParserBundle\Entity\ParserViatecSettings:
+    type: entity
+    table: parser_viatec_settings
+    repositoryClass: Onixcat\Bundle\ViatecParserBundle\Repository\ParserViatecSettingsRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        viatecLogin:
+            type: string
+            length: 255
+            unique: true
+            column: viatec_login
+        viatecPassword:
+            type: string
+            length: 255
+            column: viatec_password
+    lifecycleCallbacks: {  }

@@ -1,0 +1,108 @@
+{% extends '@SyliusAdmin/layout.html.twig' %}
+
+{% block title %} {{ 'onixcat.ui.viatec_parser'|trans }} {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    <style>
+        tr.output {
+            position: relative;
+        }
+
+        tr.output td {
+            width: 90%;
+            padding: 0 !important;
+            background-color: #EEC;
+            position: absolute;
+        }
+
+        tr.output td.hidden {
+            display: none;
+        }
+
+        tr.output pre {
+            margin: 0 0 0 7px;
+            padding: 17px 0 17px 11px;
+            height: 300px;
+            overflow: scroll;
+            background-color: white;
+        }
+
+        a.white-text {
+            color: white;
+        }
+
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts '@OnixcatViatecParserBundle/Resources/public/shell.js' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block content %}
+    <div class="ui stackable two column grid">
+        <div class="column">
+        {% include 'OnixcatViatecParserBundle:Command:header.html.twig' %}
+        {% include 'OnixcatViatecParserBundle:Command:breadcrumb.html.twig' %}
+        </div>
+    </div>
+    <table class="ui celled table">
+        <thead>
+        <tr>
+            <th>Код</th>
+            {% if is_granted('ROLE_ADMINISTRATION_ACCESS') %}
+                <th>Команда</th>
+            {% endif %}
+            {# <th>Описание команды</th> @todo Make description for command #}
+            <th>Время начала</th>
+            <th>Время окончания</th>
+            <th>Статус</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for code, c in commands %}
+            {% set ready = not c.state or c.state.state == 'ready' %}
+            {% set execUrl = url('onixcat_shell_exec', {'code': code}) %}
+            {% set stateUrl = url('onixcat_shell_state', {'code': code}) %}
+            <tr>
+                <td>{{ code }}</td>
+                {% if is_granted('ROLE_ADMINISTRATION_ACCESS') %}
+                    <td><i>{{ c.cmd }}</i></td>
+                {% endif %}
+                <td id="{{ code }}_started-at">{{ c.state.startedAt|default('n/a') }}</td>
+                <td id="{{ code }}_finished-at">{{ c.state.finishedAt|default('n/a') }}</td>
+                <td>
+                    {% set ready = not c.state or c.state.state == 'ready' %}
+                    <span class="ui green basic label {% if not ready %}hidden{% endif %}"
+                          id="{{ code }}_ready">готов</span>
+                    <span class="ui yellow basic label {% if ready %}hidden{% endif %}"
+                          id="{{ code }}_running">выполняется</span>
+                </td>
+                <td>
+                    {{ include('OnixcatViatecParserBundle:Command/Actions:_run_action.html.twig', {'code': code, 'execUrl': execUrl, 'stateUrl': stateUrl }) }}
+
+                    {{ include('OnixcatViatecParserBundle:Command/Actions:_show_action.html.twig', {'code': code, 'state': c.state })  }}
+
+                    {% if not ready %}
+                        <script type="text/javascript">refreshState('{{ code }}', '{{ stateUrl }}');</script>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr class="output">
+                <td colspan="6" class="hidden">
+                    <pre id="{{ code }}_output">{{ c.state.output|default('') }}</pre>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="ui right floated primary button">
+        <a href="{{ path('ult_admin_viatec_parser_files_list') }}" class="white-text">Перейти к списку файлов</a>
+    </div>
+{% endblock %}

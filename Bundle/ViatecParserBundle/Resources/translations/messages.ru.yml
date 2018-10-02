@@ -1,0 +1,14 @@
+onixcat:
+        ui:
+            parser: Парсер
+            viatec_parser: Парсер Viatec
+            files_not_found: Файлы не найдены!
+            viatec_parser_files: Список файлов Viatec
+            viatec_file_download: Скачать
+            viatec_form_login: Логин
+            viatec_form_password: Пароль
+            viatec_parser_settings: Настройки парсера Viatec
+            viatec_parser_auth_data: Данные авторизации на сайте Viatec
+            viatec_parser_settings_save: Сохранить
+
+
